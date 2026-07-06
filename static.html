@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>简历优化工具</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Syne:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', 'Noto Sans SC', sans-serif;
+    }
+    .font-display {
+      font-family: 'Syne', 'Noto Sans SC', sans-serif;
+    }
+    .card-hover {
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .card-hover:hover {
+      transform: translateY(-4px);
+    }
+    .btn-primary {
+      position: relative;
+      overflow: hidden;
+    }
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.5s ease;
+    }
+    .btn-primary:hover::before {
+      left: 100%;
+    }
+    .animate-fade-in {
+      animation: fadeIn 0.6s ease-out forwards;
+    }
+    .animate-slide-up {
+      animation: slideUp 0.6s ease-out forwards;
+    }
+    .animate-float {
+      animation: float 6s ease-in-out infinite;
+    }
+    .animate-pulse {
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes fadeIn {
+      0% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+    @keyframes slideUp {
+      0% { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    .gradient-text {
+      background: linear-gradient(135deg, #3b82f6, #84cc16);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 3px;
+    }
+  </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+  <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
+    <div class="absolute top-20 left-20 w-64 h-64 bg-blue-200/20 rounded-full blur-3xl"></div>
+    <div class="absolute bottom-40 right-20 w-96 h-96 bg-lime-200/20 rounded-full blur-3xl"></div>
+  </div>
+
+  <header class="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-lg shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-700 rounded-xl flex items-center justify-center">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+              <path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+            </svg>
+          </div>
+          <div>
+            <h1 class="text-lg font-display font-bold bg-gradient-to-r from-blue-600 to-lime-500 bg-clip-text text-transparent">
+              ResumeAI
+            </h1>
+            <p class="text-[10px] text-gray-500 uppercase tracking-wider">智能简历优化</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-8">
+    <div class="text-center mb-12 animate-fade-in">
+      <h2 class="text-4xl md:text-5xl lg:text-6xl font-display font-bold mb-4">
+        <span class="bg-gradient-to-r from-blue-600 via-blue-500 to-lime-500 bg-clip-text text-transparent">
+          让你的简历脱颖而出
+        </span>
+      </h2>
+      <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+        AI 驱动的智能分析，精准匹配目标岗位，一键生成专业优化建议
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div class="space-y-6">
+        <div class="bg-white rounded-2xl border border-gray-100 p-6 card-hover shadow-sm hover:shadow-lg">
+          <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+            <span class="text-sm font-medium text-gray-600">身份选择</span>
+            <div class="flex bg-gray-100 rounded-xl p-1.5 w-full sm:w-auto">
+              <button id="freshBtn" class="flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg text-sm font-medium bg-white text-blue-600 shadow-md transition-all">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-blue-500">
+                  <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+                  <polyline points="2 16 10 12 2 8"></polyline>
+                  <line x1="22" y1="16" x2="12" y2="12" />
+                  <line x1="22" y1="8" x2="12" y2="12" />
+                </svg>
+                应届生
+              </button>
+              <button id="experiencedBtn" class="flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-200 transition-all">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                  <path d="M2 10h20"></path>
+                </svg>
+                职场人
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-gray-100 p-6 card-hover shadow-sm hover:shadow-lg">
+          <h2 class="text-lg font-display font-semibold text-gray-800 mb-4 flex items-center gap-2">
+            <span class="w-1 h-5 bg-gradient-to-b from-blue-500 to-lime-500 rounded-full"></span>
+            API 配置
+          </h2>
+          <div class="space-y-3">
+            <div class="flex items-center gap-2">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-purple-500">
+                <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+                <path d="M3 3v5h5"></path>
+                <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"></path>
+                <path d="M16 21h5v-5"></path>
+              </svg>
+              <span class="text-sm font-medium text-gray-600">API Key</span>
+              <span class="text-xs text-gray-400">(DeepSeek API Key)</span>
+            </div>
+            <input 
+              id="apiKeyInput" 
+              type="password" 
+              placeholder="请输入 DeepSeek API Key" 
+              class="w-full px-4 py-3 rounded-xl text-sm bg-gray-50 border border-gray-200 text-gray-800 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/10 transition-all"
+            />
+            <div class="flex items-center gap-2">
+              <span class="text-xs text-gray-500">API 地址:</span>
+              <input 
+                id="apiUrlInput" 
+                type="text" 
+                value="https://api.deepseek.com" 
+                class="flex-1 px-3 py-1.5 rounded-lg text-xs bg-gray-50 border border-gray-200 text-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/10 transition-all"
+              />
+              <span class="text-xs text-gray-500">模型:</span>
+              <input 
+                id="modelInput" 
+                type="text" 
+                value="deepseek-chat" 
+                class="w-32 px-3 py-1.5 rounded-lg text-xs bg-gray-50 border border-gray-200 text-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/10 transition-all"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-gray-100 p-6 card-hover shadow-sm hover:shadow-lg">
+          <h2 class="text-lg font-display font-semibold text-gray-800 mb-4 flex items-center gap-2">
+            <span class="w-1 h-5 bg-gradient-to-b from-blue-500 to-lime-500 rounded-full"></span>
+            输入信息
+          </h2>
+          <div class="space-y-6">
+            <div class="space-y-2.5">
+              <label class="flex items-center gap-2 text-sm font-medium text-gray-800">
+                <div class="w-7 h-7 rounded-lg bg-blue-50 flex items-center justify-center">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-blue-500">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                    <polyline points="10 9 9 9 8 9"></polyline>
+                  </svg>
+                </div>
+                简历内容
+              </label>
+              <textarea id="resumeInput" placeholder="请粘贴您的简历内容..." class="w-full h-40 px-4 py-3 rounded-xl text-sm bg-gray-50 border border-gray-200 text-gray-800 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/10 transition-all resize-none"></textarea>
+              <div class="text-xs text-gray-500 flex items-center gap-1">
+                <span class="w-1.5 h-1.5 bg-blue-500 rounded-full"></span>
+                提示：请输入完整的简历内容，包括个人信息、教育背景、工作/项目经验等
+              </div>
+            </div>
+
+            <div class="space-y-2.5">
+              <label class="flex items-center gap-2 text-sm font-medium text-gray-800">
+                <div class="w-7 h-7 rounded-lg bg-lime-50 flex items-center justify-center">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-lime-500">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                  </svg>
+                </div>
+                岗位JD
+              </label>
+              <textarea id="jdInput" placeholder="请粘贴目标岗位的JD描述..." class="w-full h-40 px-4 py-3 rounded-xl text-sm bg-gray-50 border border-gray-200 text-gray-800 placeholder-gray-400 focus:border-lime-500 focus:ring-2 focus:ring-lime-500/10 transition-all resize-none"></textarea>
+              <div class="text-xs text-gray-500 flex items-center gap-1">
+                <span class="w-1.5 h-1.5 bg-lime-500 rounded-full"></span>
+                提示：请输入岗位的完整JD，包括职责描述、任职要求等
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button id="optimizeBtn" class="w-full py-4 rounded-xl font-display font-semibold text-white bg-gradient-to-r from-blue-600 via-blue-500 to-blue-600 hover:from-blue-500 hover:via-blue-400 hover:to-blue-500 shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-3 btn-primary">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+            <path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+          </svg>
+          <span>开启智能诊断</span>
+        </button>
+
+        <div id="errorMessage" class="hidden bg-red-50 border border-red-200 rounded-xl p-4">
+          <div class="flex items-start gap-3">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-red-500 mt-0.5 flex-shrink-0">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="8" x2="12" y2="12"></line>
+              <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
+            <div>
+              <h4 class="text-sm font-semibold text-red-800 mb-1">诊断失败</h4>
+              <p id="errorText" class="text-xs text-red-600"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="space-y-6">
+        <div id="resultArea" class="space-y-6 hidden">
+          <div id="diagnosisCard" class="bg-white rounded-2xl border border-gray-100 p-6 card-hover shadow-sm hover:shadow-lg animate-slide-up">
+            <div class="flex items-center gap-3 mb-5">
+              <div class="w-10 h-10 rounded-xl bg-orange-50 flex items-center justify-center">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-orange-500">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="12" y1="8" x2="12" y2="12"></line>
+                  <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                </svg>
+              </div>
+              <div>
+                <h3 class="text-lg font-display font-semibold text-gray-800">问题诊断</h3>
+                <p class="text-xs text-gray-500">AI 智能分析结果</p>
+              </div>
+            </div>
+            <div id="diagnosisContent" class="bg-gray-50 rounded-xl p-4 max-h-64 overflow-y-auto"></div>
+          </div>
+
+          <div id="optimizedCard" class="bg-white rounded-2xl border border-gray-100 p-6 card-hover shadow-sm hover:shadow-lg animate-slide-up" style="animation-delay: 0.1s">
+            <div class="flex items-center justify-between mb-5">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-green-50 flex items-center justify-center">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-green-500">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                    <polyline points="10 9 9 9 8 9"></polyline>
+                  </svg>
+                </div>
+                <div>
+                  <h3 class="text-lg font-display font-semibold text-gray-800">优化后的简历内容</h3>
+                  <p class="text-xs text-gray-500">AI 智能优化建议</p>
+                </div>
+              </div>
+              <button id="copyBtn" class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium bg-gray-100 text-gray-600 hover:bg-blue-500 hover:text-white transition-all">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+                复制
+              </button>
+            </div>
+            <div class="bg-gray-50 rounded-xl p-4 max-h-80 overflow-y-auto">
+              <pre id="optimizedContent" class="text-xs text-gray-800 whitespace-pre-wrap leading-relaxed"></pre>
+            </div>
+          </div>
+
+          <div id="matchingCard" class="bg-white rounded-2xl border border-gray-100 p-6 card-hover shadow-sm hover:shadow-lg animate-slide-up" style="animation-delay: 0.2s">
+            <div class="flex items-center gap-3 mb-5">
+              <div class="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-blue-500">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+              </div>
+              <div>
+                <h3 class="text-lg font-display font-semibold text-gray-800">职位匹配建议</h3>
+                <p class="text-xs text-gray-500">综合匹配分析</p>
+              </div>
+            </div>
+            <div id="matchingContent" class="bg-gray-50 rounded-xl p-4 max-h-64 overflow-y-auto"></div>
+          </div>
+        </div>
+
+        <div id="emptyState" class="bg-white rounded-2xl border border-gray-100 p-12 text-center animate-fade-in">
+          <div class="relative inline-block mb-6">
+            <div class="w-20 h-20 bg-gradient-to-br from-blue-100 to-lime-100 rounded-full flex items-center justify-center animate-float">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-blue-500">
+                <path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+              </svg>
+            </div>
+            <div class="absolute -inset-4 bg-gradient-to-br from-blue-200 to-lime-200 rounded-full blur-xl opacity-30 animate-pulse"></div>
+          </div>
+          <h3 class="text-xl font-display font-semibold text-gray-800 mb-3">准备好优化你的简历了吗？</h3>
+          <p class="text-gray-600 max-w-md mx-auto">
+            在左侧输入 API Key、简历内容和目标岗位JD，AI 将为你提供专业的优化建议和匹配分析
+          </p>
+        </div>
+
+        <div id="loadingState" class="hidden bg-white rounded-2xl border border-gray-100 p-12 text-center">
+          <div class="relative inline-block mb-6">
+            <div class="w-20 h-20 bg-gradient-to-br from-blue-100 to-lime-100 rounded-full flex items-center justify-center">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-blue-500 animate-spin">
+                <circle cx="12" cy="12" r="10"></circle>
+              </svg>
+            </div>
+            <div class="absolute -inset-4 bg-gradient-to-br from-blue-200 to-lime-200 rounded-full blur-xl opacity-30 animate-pulse"></div>
+          </div>
+          <h3 class="text-xl font-display font-semibold text-gray-800 mb-3">AI 正在分析中...</h3>
+          <p class="text-gray-600 max-w-md mx-auto">
+            正在结合你的身份、简历和岗位JD进行智能诊断，请稍候
+          </p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="bg-white border-t border-gray-100 mt-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+        <p class="text-xs text-gray-400">ResumeAI · 智能简历优化工具 MVP</p>
+        <div class="flex items-center gap-4">
+          <span class="text-xs text-gray-400">Powered by DeepSeek</span>
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 bg-lime-500 rounded-full animate-pulse"></span>
+            <span class="text-xs text-lime-500 font-medium">AI Ready</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    let userType = 'fresh';
+
+    const freshBtn = document.getElementById('freshBtn');
+    const experiencedBtn = document.getElementById('experiencedBtn');
+
+    freshBtn.addEventListener('click', () => {
+      userType = 'fresh';
+      freshBtn.className = 'flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg text-sm font-medium bg-white text-blue-600 shadow-md transition-all';
+      experiencedBtn.className = 'flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-200 transition-all';
+    });
+
+    experiencedBtn.addEventListener('click', () => {
+      userType = 'experienced';
+      experiencedBtn.className = 'flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg text-sm font-medium bg-white text-blue-600 shadow-md transition-all';
+      freshBtn.className = 'flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-200 transition-all';
+    });
+
+    const optimizeBtn = document.getElementById('optimizeBtn');
+    const apiKeyInput = document.getElementById('apiKeyInput');
+    const apiUrlInput = document.getElementById('apiUrlInput');
+    const modelInput = document.getElementById('modelInput');
+    const resumeInput = document.getElementById('resumeInput');
+    const jdInput = document.getElementById('jdInput');
+    const resultArea = document.getElementById('resultArea');
+    const emptyState = document.getElementById('emptyState');
+    const loadingState = document.getElementById('loadingState');
+    const errorMessage = document.getElementById('errorMessage');
+    const errorText = document.getElementById('errorText');
+
+    optimizeBtn.addEventListener('click', async () => {
+      const apiKey = apiKeyInput.value.trim();
+      const apiUrl = apiUrlInput.value.trim();
+      const model = modelInput.value.trim();
+      const resume = resumeInput.value.trim();
+      const jd = jdInput.value.trim();
+
+      if (!apiKey) {
+        alert('请输入 DeepSeek API Key');
+        return;
+      }
+
+      if (!resume || !jd) {
+        alert('请填写简历内容和岗位JD');
+        return;
+      }
+
+      const originalText = optimizeBtn.innerHTML;
+      optimizeBtn.innerHTML = `
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" class="animate-spin">
+          <circle cx="12" cy="12" r="10"></circle>
+        </svg>
+        <span>正在分析中...</span>
+      `;
+      optimizeBtn.disabled = true;
+
+      emptyState.classList.add('hidden');
+      resultArea.classList.add('hidden');
+      errorMessage.classList.add('hidden');
+      loadingState.classList.remove('hidden');
+
+      try {
+        const response = await fetch(`${apiUrl}/chat/completions`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${apiKey}`
+          },
+          body: JSON.stringify({
+            model: model,
+            messages: [
+              {
+                role: 'system',
+                content: '你是一个专业的简历优化专家。请根据用户的身份、简历内容和岗位JD，提供专业的优化建议。'
+              },
+              {
+                role: 'user',
+                content: `请帮我优化简历。
+
+用户身份：${userType === 'fresh' ? '应届生' : '职场人'}
+
+简历内容：
+${resume}
+
+目标岗位JD：
+${jd}
+
+请按照以下格式输出，不要包含任何额外内容：
+
+【问题诊断】：
+（列出简历存在的主要问题，每个问题用"- "开头，包含问题描述和改进建议）
+
+【优化后的简历内容】：
+（给出优化后的完整简历内容）
+
+【职位匹配建议】：
+（分析简历与目标岗位的匹配度，给出具体的优化建议）`
+              }
+            ],
+            temperature: 0.7,
+            max_tokens: 4000
+          })
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({ error: '请求失败' }));
+          throw new Error(errorData.error?.message || errorData.message || `HTTP ${response.status}`);
+        }
+
+        const data = await response.json();
+        const content = data.choices?.[0]?.message?.content;
+
+        if (!content) {
+          throw new Error('模型返回内容为空');
+        }
+
+        const parsedResult = parseModelResponse(content);
+        renderResults(parsedResult);
+
+        loadingState.classList.add('hidden');
+        resultArea.classList.remove('hidden');
+      } catch (error) {
+        loadingState.classList.add('hidden');
+        errorText.textContent = error.message || '未知错误';
+        errorMessage.classList.remove('hidden');
+        console.error('诊断失败:', error);
+      } finally {
+        optimizeBtn.innerHTML = originalText;
+        optimizeBtn.disabled = false;
+      }
+    });
+
+    function parseModelResponse(content) {
+      const diagnosisMatch = content.match(/【问题诊断】：([\s\S]*?)(?=【优化后的简历内容】：|$)/);
+      const optimizedMatch = content.match(/【优化后的简历内容】：([\s\S]*?)(?=【职位匹配建议】：|$)/);
+      const matchingMatch = content.match(/【职位匹配建议】：([\s\S]*)$/);
+
+      return {
+        diagnosis: diagnosisMatch ? diagnosisMatch[1].trim() : '未检测到问题诊断内容',
+        optimizedResume: optimizedMatch ? optimizedMatch[1].trim() : '未检测到优化后的简历内容',
+        matchingSuggestions: matchingMatch ? matchingMatch[1].trim() : '未检测到职位匹配建议'
+      };
+    }
+
+    function renderResults(data) {
+      document.getElementById('diagnosisContent').innerHTML = `
+        <p class="text-xs text-gray-600 leading-relaxed whitespace-pre-wrap">${data.diagnosis}</p>
+      `;
+
+      document.getElementById('optimizedContent').textContent = data.optimizedResume;
+
+      document.getElementById('matchingContent').innerHTML = `
+        <p class="text-xs text-gray-600 leading-relaxed whitespace-pre-wrap">${data.matchingSuggestions}</p>
+      `;
+    }
+
+    const copyBtn = document.getElementById('copyBtn');
+    copyBtn.addEventListener('click', async () => {
+      const content = document.getElementById('optimizedContent').textContent;
+      try {
+        await navigator.clipboard.writeText(content);
+        const originalHTML = copyBtn.innerHTML;
+        copyBtn.innerHTML = `
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+          已复制
+        `;
+        copyBtn.className = 'flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium bg-green-100 text-green-700';
+        setTimeout(() => {
+          copyBtn.innerHTML = originalHTML;
+          copyBtn.className = 'flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium bg-gray-100 text-gray-600 hover:bg-blue-500 hover:text-white transition-all';
+        }, 2000);
+      } catch (err) {
+        alert('复制失败，请手动复制');
+      }
+    });
+  </script>
+</body>
+</html>
